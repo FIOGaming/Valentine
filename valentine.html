@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Veux-tu être ma Valentine ? 💖</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Comic Sans MS", cursive;
+}
+
+body {
+    height: 100vh;
+    background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.container {
+    background: white;
+    padding: 40px;
+    border-radius: 25px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+h1 {
+    color: #ff4d6d;
+    margin-bottom: 15px;
+}
+
+#message {
+    min-height: 40px;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.gif-container img {
+    width: 220px;
+    border-radius: 18px;
+    margin-bottom: 25px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+button {
+    width: 140px;
+    height: 50px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: transform 0.25s ease;
+}
+
+#yesBtn {
+    background: #ff4d6d;
+    color: white;
+}
+
+#noBtn {
+    background: #ccc;
+    color: #333;
+    transition: left 0.35s ease, top 0.35s ease;
+}
+
+.heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 22px;
+    animation: floatUp 4s linear infinite;
+    opacity: 0.8;
+}
+
+@keyframes floatUp {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(-120vh); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>💖 Veux-tu être ma Valentine ? 💖</h1>
+    <p id="message">J'ai une question très importante à te poser…</p>
+
+    <div class="gif-container">
+        <!-- AVANT OUI : petit câlin kawaii -->
+        <img id="gif"
+        src="https://media.giphy.com/media/od5H3PmEG5EVq/giphy.gif">
+    </div>
+
+    <div class="buttons">
+        <button id="yesBtn">OUI 💘</button>
+        <button id="noBtn">NON 😭</button>
+    </div>
+</div>
+
+<script>
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const message = document.getElementById("message");
+const gif = document.getElementById("gif");
+
+let noClicks = 0;
+let floating = false;
+
+const texts = [
+    "T'es sûr(e) ? 🥺",
+    "Réfléchis encore 😭",
+    "Allez stp 😢",
+    "Je vais pleurer 💔",
+    "Mon cœur souffre 🥀",
+    "STOP 😭",
+    "Dernière chance 😶",
+    "Je supplie 🧎",
+    "Pourquoi tu fais ça 😭",
+    "OK TU ME FORCES 😱"
+];
+
+function enableFloating() {
+    if (!floating) {
+        const rect = noBtn.getBoundingClientRect();
+        noBtn.style.position = "fixed";
+        noBtn.style.left = rect.left + "px";
+        noBtn.style.top = rect.top + "px";
+        floating = true;
+    }
+}
+
+function moveNoButton() {
+    enableFloating();
+    const padding = 20;
+    const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding);
+    const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding);
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+}
+
+noBtn.addEventListener("click", () => {
+    noClicks++;
+    message.textContent = texts[Math.min(noClicks - 1, texts.length - 1)];
+    noBtn.textContent = texts[Math.min(noClicks - 1, texts.length - 1)];
+    yesBtn.style.transform = `scale(${1 + noClicks * 0.6})`;
+    moveNoButton();
+});
+
+noBtn.addEventListener("mouseenter", () => {
+    if (noClicks >= 10) moveNoButton();
+});
+
+yesBtn.addEventListener("click", () => {
+    message.textContent = "YAAAY 💕 VIENS LÀ 🧸💞";
+
+    /* 🧸💖 GROS GROS CÂLIN APRÈS OUI */
+    gif.src = "https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif";
+
+    yesBtn.style.display = "none";
+    noBtn.style.display = "none";
+    spawnHearts();
+});
+
+function spawnHearts() {
+    for (let i = 0; i < 30; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.textContent = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = 18 + Math.random() * 20 + "px";
+        heart.style.animationDuration = 3 + Math.random() * 2 + "s";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+    }
+}
+</script>
+
+</body>
+</html>
